@@ -562,6 +562,16 @@ void Processor::getPower(Power *value) {
       value->level3.gateLeakage = l3.power.readOp.gate_leakage;
       value->level3.runtimeDynamic = l3.rt_power.readOp.dynamic;
     }
+
+    if (XML->sys.pcie.number_units > 0 && XML->sys.pcie.num_channels > 0) {
+      value->pcie.area = pcies.area.get_area() * 1e-6;
+      value->pcie.peakDynamic = pcies.power.readOp.dynamic;
+      value->pcie.subthresholdLeakage =
+          long_channel ? pcies.power.readOp.longer_channel_leakage
+                       : pcies.power.readOp.leakage;
+      value->pcie.gateLeakage = pcies.power.readOp.gate_leakage;
+      value->pcie.runtimeDynamic = pcies.rt_power.readOp.dynamic;
+    }
   }
 }
 

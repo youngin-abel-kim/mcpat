@@ -65,6 +65,7 @@ struct Power {
   PowerGroup core;  // Total cores including all per-core elements
   PowerGroup level2;
   PowerGroup level3;
+  PowerGroup pcie;
 };
 
 using namespace cacti;
