@@ -53,12 +53,12 @@ const double AF = 0.5;
 const bool embedded = false;  // NEW
 
 const bool homogeneous_cores = true;
-const bool temperature = 360;
+const int temperature = 360;
 const int number_cache_levels = 3;
 const int L1_property = 0;  // private 0; coherent 1, shared 2.
 const int L2_property = 2;
 const bool homogeneous_L2s = true;
-const bool L3_property = 2;
+const int L3_property = 2;
 const bool homogeneous_L3s = true;
 const double Max_area_deviation = 50;
 const double Max_dynamic_deviation = 50;  // New
