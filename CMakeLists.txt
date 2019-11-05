@@ -41,7 +41,7 @@ if (MSVC)
   add_compile_options(/wd4267)  # Surpress conversion warning
 else ()
   set(CMAKE_CXX_FLAGS
-    "-g -rdynamic ${CMAKE_CXX_FLAGS}")
+    "-g ${CMAKE_CXX_FLAGS}")
 
   if (DEBUG_BUILD)
     set(CMAKE_CXX_FLAGS "-O0 ${CMAKE_CXX_FLAGS}")
