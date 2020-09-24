@@ -9,6 +9,19 @@
 cmake_minimum_required(VERSION 3.10)
 project(mcpat)
 
+# Validate build type
+if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Select CMake build type." FORCE)
+
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
+endif ()
+
+string (TOUPPER "${CMAKE_BUILD_TYPE}" uppercase_CMAKE_BUILD_TYPE)
+
+if (CMAKE_BUILD_TYPE AND NOT uppercase_CMAKE_BUILD_TYPE MATCHES "^(DEBUG|RELEASE)$")
+  message (FATAL_ERROR "Invalid value for CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+endif ()
+
 # Set output directory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -19,29 +32,6 @@ include_directories(
   ${PROJECT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/cacti
 )
-
-# Platform specific settings
-if (MSVC)
-  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-  add_compile_options(/wd4819)  # Surpress unicode warning
-  add_compile_options(/wd4305)  # Surpress truncation warning
-  add_compile_options(/wd4800)  # Surpress int -> boolean waring
-  add_compile_options(/wd4129)  # Surpress escape warning
-  add_compile_options(/wd4244)  # Surpress conversion warning
-  add_compile_options(/wd4267)  # Surpress conversion warning
-else ()
-  set(CMAKE_CXX_FLAGS
-    "-g ${CMAKE_CXX_FLAGS}")
-
-  if (DEBUG_BUILD)
-    set(CMAKE_CXX_FLAGS "-O0 ${CMAKE_CXX_FLAGS}")
-  else ()
-    set(CMAKE_CXX_FLAGS "-O2 ${CMAKE_CXX_FLAGS}")
-  endif ()
-endif ()
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Specify source files
 set(SRC_MCPAT_CACTI
@@ -91,3 +81,25 @@ add_library(mcpat STATIC
   ${SRC_MCPAT}
   ${SRC_MCPAT_CACTI}
 )
+
+# Platform specific settings
+if (MSVC)
+  target_compile_definitions(mcpat PRIVATE -D_CRT_SECURE_NO_WARNINGS)
+  target_compile_options(mcpat PRIVATE /wd4819)  # Surpress unicode warning
+  target_compile_options(mcpat PRIVATE /wd4305)  # Surpress truncation warning
+  target_compile_options(mcpat PRIVATE /wd4800)  # Surpress int -> boolean waring
+  target_compile_options(mcpat PRIVATE /wd4129)  # Surpress escape warning
+  target_compile_options(mcpat PRIVATE /wd4244)  # Surpress conversion warning
+  target_compile_options(mcpat PRIVATE /wd4267)  # Surpress conversion warning
+else ()
+  target_compile_options(mcpat PRIVATE -g)
+
+  if (uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG")
+    target_compile_options(mcpat PRIVATE -O0)
+  else ()
+    target_compile_options(mcpat PRIVATE -O2)
+  endif ()
+endif ()
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
