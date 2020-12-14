@@ -38,6 +38,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+namespace cacti {
+
 /*  The following are things you might want to change
  *  when compiling
  */
@@ -68,24 +70,24 @@ const unsigned int MAXSUBARRAYS =
 const unsigned int MAXDATASPD = 256;  // maximum for Nspd
 const unsigned int MAX_COL_MUX = 256;
 
-#define ROUTER_TYPES 3
-#define WIRE_TYPES 6
+const auto ROUTER_TYPES = 3;
+const auto WIRE_TYPES = 6;
 
 const double Cpolywire = 0;
 
 /* Threshold voltages (as a proportion of Vdd)
    If you don't know them, set all values to 0.5 */
-#define VTHFA1 0.452
-#define VTHFA2 0.304
-#define VTHFA3 0.420
-#define VTHFA4 0.413
-#define VTHFA5 0.405
-#define VTHFA6 0.452
-#define VSINV 0.452
-#define VTHCOMPINV 0.437
-#define VTHMUXNAND 0.548  // TODO : this constant must be revisited
-#define VTHEVALINV 0.452
-#define VTHSENSEEXTDRV 0.438
+const auto VTHFA1 = 0.452;
+const auto VTHFA2 = 0.304;
+const auto VTHFA3 = 0.420;
+const auto VTHFA4 = 0.413;
+const auto VTHFA5 = 0.405;
+const auto VTHFA6 = 0.452;
+const auto VSINV = 0.452;
+const auto VTHCOMPINV = 0.437;
+const auto VTHMUXNAND = 0.548;  // TODO : this constant must be revisited
+const auto VTHEVALINV = 0.452;
+const auto VTHSENSEEXTDRV = 0.438;
 
 // WmuxdrvNANDn and WmuxdrvNANDp are no longer being used but it's part of the
 // old  delay_comparator function which we are using exactly as it used to be,
@@ -98,8 +100,9 @@ const double WmuxdrvNANDp = 0;
  * The following are things you probably wouldn't want to change.
  */
 
-#define BIGNUM 1e30
-#define INF 9999999
+const auto BIGNUM = 1e30;
+const auto INF = 9999999;
+
 #ifndef MAX
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #endif
@@ -108,14 +111,12 @@ const double WmuxdrvNANDp = 0;
 #endif
 
 /* Used to communicate with the horowitz model */
-#define RISE 1
-#define FALL 0
-#define NCH 1
-#define PCH 0
+const auto RISE = 1;
+const auto FALL = 0;
+const auto NCH = 1;
+const auto PCH = 0;
 
-#define EPSILON \
-  0.5  // v4.1: This constant is being used in order to fix floating point ->
-       // integer
+// v4.1: This constant is being used in order to fix floating point -> integer
 // conversion problems that were occuring within CACTI. Typical problem that was
 // occuring was  that with different compilers a floating point number like 3.0
 // would get represented as either  2.9999....or 3.00000001 and then the integer
@@ -132,87 +133,90 @@ const double WmuxdrvNANDp = 0;
  * the fraction is just 0.01. So, in later version than 6.5 we use (int)ceil()
  * to get double to int conversion.
  */
+const auto EPSILON = 0.5;
 
-#define EPSILON2 0.1
-#define EPSILON3 0.6
+const auto EPSILON2 = 0.1;
+const auto EPSILON3 = 0.6;
 
-#define MINSUBARRAYROWS \
-  16  // For simplicity in modeling, for the row decoding structure, we assume
+// For simplicity in modeling, for the row decoding structure, we assume
 // that each row predecode block is composed of at least one 2-4 decoder. When
 // the outputs from the  row predecode blocks are combined this means that there
 // are at least 4*4=16 row decode outputs
-#define MAXSUBARRAYROWS \
-  262144  // Each row predecode block produces a max of 2^9 outputs. So
+const auto MINSUBARRAYROWS = 16;
+
+// Each row predecode block produces a max of 2^9 outputs. So
 // the maximum number of row decode outputs will be 2^9*2^9
-#define MINSUBARRAYCOLS 2
-#define MAXSUBARRAYCOLS 262144
+const auto MAXSUBARRAYROWS = 262144;
+const auto MINSUBARRAYCOLS = 2;
+const auto MAXSUBARRAYCOLS = 262144;
 
-#define INV 0
-#define NOR 1
-#define NAND 2
+const auto INV = 0;
+const auto NOR = 1;
+const auto NAND = 2;
 
-#define NUMBER_TECH_FLAVORS 4
+const auto NUMBER_TECH_FLAVORS = 4;
 
-#define NUMBER_INTERCONNECT_PROJECTION_TYPES 2  // aggressive and conservative
+const auto NUMBER_INTERCONNECT_PROJECTION_TYPES =
+    2;  // aggressive and conservative
 // 0 = Aggressive projections, 1 = Conservative projections
-#define NUMBER_WIRE_TYPES 4  // local, semi-global and global
+const auto NUMBER_WIRE_TYPES = 4;  // local, semi-global and global
 // 1 = 'Semi-global' wire type, 2 = 'Global' wire type
 
 const int dram_cell_tech_flavor = 3;
 
-#define VBITSENSEMIN \
-  0.08  // minimum bitline sense voltage is fixed to be 80
-        // mV.
+// minimum bitline sense voltage is fixed to be 80 mV.
+const auto VBITSENSEMIN = 0.08;
 
-#define fopt 4.0
+const auto fopt = 4.0;
 
-#define INPUT_WIRE_TO_INPUT_GATE_CAP_RATIO 0
-#define BUFFER_SEPARATION_LENGTH_MULTIPLIER 1
-#define NUMBER_MATS_PER_REDUNDANT_MAT 8
+const auto INPUT_WIRE_TO_INPUT_GATE_CAP_RATIO = 0;
+const auto BUFFER_SEPARATION_LENGTH_MULTIPLIER = 1;
+const auto NUMBER_MATS_PER_REDUNDANT_MAT = 8;
 
-#define NUMBER_STACKED_DIE_LAYERS 1
+const auto NUMBER_STACKED_DIE_LAYERS = 1;
 
 // this variable can be set to carry out solution optimization for
 // a maximum area allocation.
-#define STACKED_DIE_LAYER_ALLOTED_AREA_mm2 0  // 6.24 //6.21//71.5
+const auto STACKED_DIE_LAYER_ALLOTED_AREA_mm2 = 0;  // 6.24 //6.21//71.5
 
 // this variable can also be employed when solution optimization
 // with maximum area allocation is carried out.
-#define MAX_PERCENT_AWAY_FROM_ALLOTED_AREA 50
+const auto MAX_PERCENT_AWAY_FROM_ALLOTED_AREA = 50;
 
 // this variable can also be employed when solution optimization
 // with maximum area allocation is carried out.
-#define MIN_AREA_EFFICIENCY 20
+const auto MIN_AREA_EFFICIENCY = 20;
 
 // this variable can be employed when solution with a desired
 // aspect ratio is required.
-#define STACKED_DIE_LAYER_ASPECT_RATIO 1
+const auto STACKED_DIE_LAYER_ASPECT_RATIO = 1;
 
 // this variable can be employed when solution with a desired
 // aspect ratio is required.
-#define MAX_PERCENT_AWAY_FROM_ASPECT_RATIO 101
+const auto MAX_PERCENT_AWAY_FROM_ASPECT_RATIO = 101;
 
 // this variable can be employed to carry out solution optimization
 // for a certain target random cycle time.
-#define TARGET_CYCLE_TIME_ns 1000000000
+const auto TARGET_CYCLE_TIME_ns = 1000000000;
 
-#define NUMBER_PIPELINE_STAGES 4
+const auto NUMBER_PIPELINE_STAGES = 4;
 
 // this can be used to model the length of interconnect
 // between a bank and a crossbar
-#define LENGTH_INTERCONNECT_FROM_BANK_TO_CROSSBAR 0  // 3791 // 2880//micron
+const auto LENGTH_INTERCONNECT_FROM_BANK_TO_CROSSBAR =
+    0;  // 3791 // 2880//micron
 
-#define IS_CROSSBAR 0
-#define NUMBER_INPUT_PORTS_CROSSBAR 8
-#define NUMBER_OUTPUT_PORTS_CROSSBAR 8
-#define NUMBER_SIGNALS_PER_PORT_CROSSBAR 256
+const auto IS_CROSSBAR = 0;
+const auto NUMBER_INPUT_PORTS_CROSSBAR = 8;
+const auto NUMBER_OUTPUT_PORTS_CROSSBAR = 8;
+const auto NUMBER_SIGNALS_PER_PORT_CROSSBAR = 256;
 
-#define MAT_LEAKAGE_REDUCTION_DUE_TO_SLEEP_TRANSISTORS_FACTOR 1
-#define LEAKAGE_REDUCTION_DUE_TO_LONG_CHANNEL_HP_TRANSISTORS_FACTOR 1
+const auto MAT_LEAKAGE_REDUCTION_DUE_TO_SLEEP_TRANSISTORS_FACTOR = 1;
+const auto LEAKAGE_REDUCTION_DUE_TO_LONG_CHANNEL_HP_TRANSISTORS_FACTOR = 1;
 
-#define PAGE_MODE 0
+const auto PAGE_MODE = 0;
 
-#define MAIN_MEM_PER_CHIP_STANDBY_CURRENT_mA 60
+const auto MAIN_MEM_PER_CHIP_STANDBY_CURRENT_mA = 60;
 // We are actually not using this variable in the CACTI code. We just want to
 // acknowledge that this current should be multiplied by the DDR(n) system VDD
 // value to compute the standby power consumed during precharge.
@@ -229,13 +233,13 @@ const static double num_bits_per_ecc_b_ = 8.0;
 
 const double bit_to_byte = 8.0;
 
-#define MAX_NUMBER_GATES_STAGE 20
-#define MAX_NUMBER_HTREE_NODES 20
-#define NAND2_LEAK_STACK_FACTOR 0.2
-#define NAND3_LEAK_STACK_FACTOR 0.2
-#define NOR2_LEAK_STACK_FACTOR 0.2
-#define INV_LEAK_STACK_FACTOR 0.5
-#define MAX_NUMBER_ARRAY_PARTITIONS 1000000
+const auto MAX_NUMBER_GATES_STAGE = 20;
+const auto MAX_NUMBER_HTREE_NODES = 20;
+const auto NAND2_LEAK_STACK_FACTOR = 0.2;
+const auto NAND3_LEAK_STACK_FACTOR = 0.2;
+const auto NOR2_LEAK_STACK_FACTOR = 0.2;
+const auto INV_LEAK_STACK_FACTOR = 0.5;
+const auto MAX_NUMBER_ARRAY_PARTITIONS = 1000000;
 
 // abbreviations used in this project
 // ----------------------------------
@@ -267,5 +271,7 @@ const double pppm_Ig[4] = {0, 0, 1, 0};
 const double pppm_sc[4] = {0, 0, 0, 1};
 
 const double Ilinear_to_Isat_ratio = 2.0;
+
+}  // namespace cacti
 
 #endif
