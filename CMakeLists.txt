@@ -93,12 +93,6 @@ if (MSVC)
   target_compile_options(mcpat PRIVATE /wd4267)  # Surpress conversion warning
 else ()
   target_compile_options(mcpat PRIVATE -g)
-
-  if (uppercase_CMAKE_BUILD_TYPE STREQUAL "DEBUG")
-    target_compile_options(mcpat PRIVATE -O0)
-  else ()
-    target_compile_options(mcpat PRIVATE -O2)
-  endif ()
 endif ()
 
 set(CMAKE_CXX_STANDARD 17)
